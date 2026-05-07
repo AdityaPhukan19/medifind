@@ -75,10 +75,15 @@ export function Header({ cartCount, onCartClick }: HeaderProps) {
           </div>
 
           <div className="flex items-center gap-4">
-            <button className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-accent transition-colors">
+            <a 
+              href="https://maps.google.com/maps?q=Assam,India" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-accent transition-colors"
+            >
               <MapPin className="w-4 h-4 text-green-600" />
               <span className="text-sm">Assam, India</span>
-            </button>
+            </a>
 
             <button
               onClick={onCartClick}

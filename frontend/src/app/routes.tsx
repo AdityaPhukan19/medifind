@@ -5,11 +5,12 @@ import { MedicinesPage } from './pages/MedicinesPage';
 import { ShopsPage } from './pages/ShopsPage';
 import { CategoriesPage } from './pages/CategoriesPage';
 import { LoginPage } from './pages/LoginPage';
-import { useOutletContext } from 'react-router';
 import type { Medicine } from './components/MedicineCard';
 
 export interface OutletContext {
   onAddToCart: (medicine: Medicine, shop: string) => void;
+  nearbyShops: string[];
+  setNearbyShops: (shops: string[]) => void;
 }
 
 export const router = createBrowserRouter([
@@ -24,17 +25,11 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        Component: () => {
-          const { onAddToCart } = useOutletContext<OutletContext>();
-          return <HomePage onAddToCart={onAddToCart} />;
-        },
+        Component: HomePage,
       },
       {
         path: 'medicines',
-        Component: () => {
-          const { onAddToCart } = useOutletContext<OutletContext>();
-          return <MedicinesPage onAddToCart={onAddToCart} />;
-        },
+        Component: MedicinesPage,
       },
       {
         path: 'shops',

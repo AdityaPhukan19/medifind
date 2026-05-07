@@ -8,6 +8,14 @@ import type { Medicine } from '../components/MedicineCard';
 export function RootLayout() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [nearbyShops, setNearbyShops] = useState<string[]>([
+    'M/S MAA MEDICOS',
+    'Pronima Medical Hall',
+    'Naya Jeevan Medical',
+    'Borah Medical',
+    'Joyguru Medical Store',
+    'Maa Gunalata Medical',
+  ]);
 
   const handleAddToCart = (medicine: Medicine, shop: string) => {
     const shopAvailability = medicine.availability.find((a) => a.shopName === shop);
@@ -59,7 +67,7 @@ export function RootLayout() {
         onCartClick={() => setIsCartOpen(true)}
       />
 
-      <Outlet context={{ onAddToCart: handleAddToCart }} />
+      <Outlet context={{ onAddToCart: handleAddToCart, nearbyShops, setNearbyShops }} />
 
       <footer className="bg-gradient-to-br from-green-900 via-emerald-900 to-teal-900 text-white py-12 mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

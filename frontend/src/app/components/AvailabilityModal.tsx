@@ -5,10 +5,15 @@ interface AvailabilityModalProps {
   medicine: Medicine | null;
   onClose: () => void;
   onAddToCart: (medicine: Medicine, shop: string) => void;
+  nearbyShops?: string[];
 }
 
-export function AvailabilityModal({ medicine, onClose, onAddToCart }: AvailabilityModalProps) {
+export function AvailabilityModal({ medicine, onClose, onAddToCart, nearbyShops }: AvailabilityModalProps) {
   if (!medicine) return null;
+
+  const filteredAvailability = nearbyShops && nearbyShops.length > 0
+    ? medicine.availability.filter((shop) => nearbyShops.includes(shop.shopName))
+    : medicine.availability;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
@@ -27,10 +32,10 @@ export function AvailabilityModal({ medicine, onClose, onAddToCart }: Availabili
         </div>
 
         <div className="p-6 overflow-y-auto max-h-[calc(80vh-120px)]">
-          <h3 className="font-medium mb-4">Available at {medicine.availability.length} nearby shops</h3>
+          <h3 className="font-medium mb-4">Available at {filteredAvailability.length} nearby shops</h3>
 
           <div className="space-y-3">
-            {medicine.availability.map((shop, index) => (
+            {filteredAvailability.map((shop, index) => (
               <div
                 key={index}
                 className="flex items-center justify-between p-4 bg-gradient-to-r from-green-50/50 to-emerald-50/50 rounded-xl border border-border hover:shadow-md transition-shadow"

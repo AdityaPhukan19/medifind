@@ -6,7 +6,7 @@ export interface CartItem {
   shop: string;
   price: number;
   quantity: number;
-  image: string;
+  image: string | { default: string };
 }
 
 interface CartProps {
@@ -53,8 +53,14 @@ export function Cart({ isOpen, items, onClose, onUpdateQuantity, onRemove }: Car
                   key={item.id}
                   className="flex gap-4 p-4 bg-accent/50 rounded-xl"
                 >
-                  <div className="w-16 h-16 bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 rounded-lg flex items-center justify-center text-2xl flex-shrink-0">
-                    {item.image}
+                  <div className="w-16 h-16 bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 rounded-lg flex items-center justify-center text-2xl flex-shrink-0 overflow-hidden">
+                    {typeof item.image === 'object' ? (
+                      <img src={item.image.default} alt={item.name} className="w-full h-full object-cover" />
+                    ) : typeof item.image === 'string' && item.image.includes('.') ? (
+                      <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                    ) : (
+                      item.image
+                    )}
                   </div>
 
                   <div className="flex-1 min-w-0">

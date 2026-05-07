@@ -1,8 +1,19 @@
 import { useState } from 'react';
 import { Search, Filter, SlidersHorizontal } from 'lucide-react';
+import { useOutletContext } from 'react-router';
 import { MedicineCard } from '../components/MedicineCard';
 import type { Medicine } from '../components/MedicineCard';
 import { AvailabilityModal } from '../components/AvailabilityModal';
+import type { OutletContext } from '../routes';
+import amoxicillinImg from '../components/Amoxicillin250mg.webp';
+import paracetamolImg from '../components/paracetamol500mg.webp';
+import ibuprofenImg from '../components/ibuprofen400mg.webp';
+import cetirizineImg from '../components/cetirizine10mg.webp';
+import metforminImg from '../components/metformin500mg.webp';
+import vitaminD3Img from '../components/vitaminD3100iu.jpg';
+import aspirinImg from '../components/aspirin100mg.webp';
+import omeprazoleImg from '../components/omeprazole20mg.webp';
+import lisinoprilImg from '../components/lisinopril10mg.webp';
 
 const allMedicines: Medicine[] = [
   {
@@ -10,7 +21,7 @@ const allMedicines: Medicine[] = [
     name: 'Paracetamol 500mg',
     genericName: 'Acetaminophen',
     price: 5.99,
-    image: '💊',
+    image: paracetamolImg,
     category: 'Pain Relief',
     prescription: false,
     availability: [
@@ -24,7 +35,7 @@ const allMedicines: Medicine[] = [
     name: 'Amoxicillin 250mg',
     genericName: 'Amoxicillin',
     price: 12.99,
-    image: '💉',
+    image: amoxicillinImg,
     category: 'Antibiotic',
     prescription: true,
     availability: [
@@ -37,7 +48,7 @@ const allMedicines: Medicine[] = [
     name: 'Ibuprofen 400mg',
     genericName: 'Ibuprofen',
     price: 7.49,
-    image: '💊',
+    image: ibuprofenImg,
     category: 'Anti-inflammatory',
     prescription: false,
     availability: [
@@ -51,7 +62,7 @@ const allMedicines: Medicine[] = [
     name: 'Cetirizine 10mg',
     genericName: 'Cetirizine HCl',
     price: 8.99,
-    image: '🌿',
+    image: cetirizineImg,
     category: 'Antihistamine',
     prescription: false,
     availability: [
@@ -64,7 +75,7 @@ const allMedicines: Medicine[] = [
     name: 'Metformin 500mg',
     genericName: 'Metformin HCl',
     price: 15.99,
-    image: '💊',
+    image: metforminImg,
     category: 'Diabetes',
     prescription: true,
     availability: [
@@ -78,7 +89,7 @@ const allMedicines: Medicine[] = [
     name: 'Vitamin D3 1000 IU',
     genericName: 'Cholecalciferol',
     price: 9.99,
-    image: '☀️',
+    image: vitaminD3Img,
     category: 'Supplement',
     prescription: false,
     availability: [
@@ -91,7 +102,7 @@ const allMedicines: Medicine[] = [
     name: 'Aspirin 100mg',
     genericName: 'Acetylsalicylic Acid',
     price: 4.99,
-    image: '💊',
+    image: aspirinImg,
     category: 'Pain Relief',
     prescription: false,
     availability: [
@@ -104,7 +115,7 @@ const allMedicines: Medicine[] = [
     name: 'Omeprazole 20mg',
     genericName: 'Omeprazole',
     price: 11.49,
-    image: '💊',
+    image: omeprazoleImg,
     category: 'Digestive Health',
     prescription: false,
     availability: [
@@ -117,7 +128,7 @@ const allMedicines: Medicine[] = [
     name: 'Lisinopril 10mg',
     genericName: 'Lisinopril',
     price: 13.99,
-    image: '💉',
+    image: lisinoprilImg,
     category: 'Blood Pressure',
     prescription: true,
     availability: [
@@ -127,11 +138,10 @@ const allMedicines: Medicine[] = [
   },
 ];
 
-interface MedicinesPageProps {
-  onAddToCart: (medicine: Medicine, shop: string) => void;
-}
+interface MedicinesPageProps {}
 
-export function MedicinesPage({ onAddToCart }: MedicinesPageProps) {
+export function MedicinesPage() {
+  const { onAddToCart, nearbyShops } = useOutletContext<OutletContext>();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedMedicine, setSelectedMedicine] = useState<Medicine | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
@@ -243,6 +253,7 @@ export function MedicinesPage({ onAddToCart }: MedicinesPageProps) {
               medicine={medicine}
               onAddToCart={onAddToCart}
               onCheckAvailability={setSelectedMedicine}
+              nearbyShops={nearbyShops}
             />
           ))}
         </div>
@@ -260,6 +271,7 @@ export function MedicinesPage({ onAddToCart }: MedicinesPageProps) {
         medicine={selectedMedicine}
         onClose={() => setSelectedMedicine(null)}
         onAddToCart={onAddToCart}
+        nearbyShops={nearbyShops}
       />
     </>
   );

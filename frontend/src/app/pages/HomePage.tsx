@@ -1,9 +1,17 @@
 import { useState } from 'react';
 import { Search, TrendingUp } from 'lucide-react';
+import { useOutletContext } from 'react-router';
 import { MedicineCard } from '../components/MedicineCard';
 import type { Medicine } from '../components/MedicineCard';
 import { AvailabilityModal } from '../components/AvailabilityModal';
 import type { CartItem } from '../components/Cart';
+import type { OutletContext } from '../routes';
+import amoxicillinImg from '../components/Amoxicillin250mg.webp';
+import paracetamolImg from '../components/paracetamol500mg.webp';
+import ibuprofenImg from '../components/ibuprofen400mg.webp';
+import cetirizineImg from '../components/cetirizine10mg.webp';
+import metforminImg from '../components/metformin500mg.webp';
+import vitaminD3Img from '../components/vitaminD3100iu.jpg';
 
 const mockMedicines: Medicine[] = [
   {
@@ -11,7 +19,7 @@ const mockMedicines: Medicine[] = [
     name: 'Paracetamol 500mg',
     genericName: 'Acetaminophen',
     price: 5.99,
-    image: '💊',
+    image: paracetamolImg,
     category: 'Pain Relief',
     prescription: false,
     availability: [
@@ -25,7 +33,7 @@ const mockMedicines: Medicine[] = [
     name: 'Amoxicillin 250mg',
     genericName: 'Amoxicillin',
     price: 12.99,
-    image: '💉',
+    image: amoxicillinImg,
     category: 'Antibiotic',
     prescription: true,
     availability: [
@@ -38,7 +46,7 @@ const mockMedicines: Medicine[] = [
     name: 'Ibuprofen 400mg',
     genericName: 'Ibuprofen',
     price: 7.49,
-    image: '💊',
+    image: ibuprofenImg,
     category: 'Anti-inflammatory',
     prescription: false,
     availability: [
@@ -52,7 +60,7 @@ const mockMedicines: Medicine[] = [
     name: 'Cetirizine 10mg',
     genericName: 'Cetirizine HCl',
     price: 8.99,
-    image: '🌿',
+    image: cetirizineImg,
     category: 'Antihistamine',
     prescription: false,
     availability: [
@@ -65,7 +73,7 @@ const mockMedicines: Medicine[] = [
     name: 'Metformin 500mg',
     genericName: 'Metformin HCl',
     price: 15.99,
-    image: '💊',
+    image: metforminImg,
     category: 'Diabetes',
     prescription: true,
     availability: [
@@ -79,7 +87,7 @@ const mockMedicines: Medicine[] = [
     name: 'Vitamin D3 1000 IU',
     genericName: 'Cholecalciferol',
     price: 9.99,
-    image: '☀️',
+    image: vitaminD3Img,
     category: 'Supplement',
     prescription: false,
     availability: [
@@ -89,11 +97,10 @@ const mockMedicines: Medicine[] = [
   },
 ];
 
-interface HomePageProps {
-  onAddToCart: (medicine: Medicine, shop: string) => void;
-}
+interface HomePageProps {}
 
-export function HomePage({ onAddToCart }: HomePageProps) {
+export function HomePage() {
+  const { onAddToCart, nearbyShops } = useOutletContext<OutletContext>();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedMedicine, setSelectedMedicine] = useState<Medicine | null>(null);
   const [filteredMedicines, setFilteredMedicines] = useState(mockMedicines);
@@ -173,7 +180,6 @@ export function HomePage({ onAddToCart }: HomePageProps) {
           </div>
           <div>
             <h2 className="text-2xl font-semibold">Popular Medicines</h2>
-            <p className="text-muted-foreground">Most searched in your area</p>
           </div>
         </div>
 
@@ -184,6 +190,7 @@ export function HomePage({ onAddToCart }: HomePageProps) {
               medicine={medicine}
               onAddToCart={onAddToCart}
               onCheckAvailability={setSelectedMedicine}
+              nearbyShops={nearbyShops}
             />
           ))}
         </div>
@@ -193,6 +200,7 @@ export function HomePage({ onAddToCart }: HomePageProps) {
         medicine={selectedMedicine}
         onClose={() => setSelectedMedicine(null)}
         onAddToCart={onAddToCart}
+        nearbyShops={nearbyShops}
       />
     </>
   );

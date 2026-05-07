@@ -5,7 +5,7 @@ export interface Medicine {
   name: string;
   genericName: string;
   price: number;
-  image: string;
+  image: string | { default: string };
   category: string;
   prescription: boolean;
   availability: {
@@ -20,6 +20,7 @@ interface MedicineCardProps {
   medicine: Medicine;
   onAddToCart: (medicine: Medicine, shop: string) => void;
   onCheckAvailability: (medicine: Medicine) => void;
+  nearbyShops?: string[];
 }
 
 export function MedicineCard({ medicine, onAddToCart, onCheckAvailability }: MedicineCardProps) {
@@ -29,7 +30,13 @@ export function MedicineCard({ medicine, onAddToCart, onCheckAvailability }: Med
     <div className="group bg-white rounded-2xl border border-border overflow-hidden hover:shadow-lg transition-all duration-300">
       <div className="relative aspect-square bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 p-6">
         <div className="w-full h-full flex items-center justify-center text-6xl">
-          {medicine.image}
+          {typeof medicine.image === 'object' ? (
+            <img src={medicine.image.default} alt={medicine.name} className="w-full h-full object-cover" />
+          ) : typeof medicine.image === 'string' && medicine.image.includes('.') ? (
+            <img src={medicine.image} alt={medicine.name} className="w-full h-full object-cover" />
+          ) : (
+            medicine.image
+          )}
         </div>
         {medicine.prescription && (
           <span className="absolute top-3 right-3 px-3 py-1 bg-amber-100 text-amber-700 text-xs rounded-full">

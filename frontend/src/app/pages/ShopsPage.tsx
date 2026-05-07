@@ -1,5 +1,11 @@
 import { useState } from 'react';
 import { MapPin, Clock, Star, Phone, Navigation, Search } from 'lucide-react';
+import maamedicos from '../components/maamedicos.jpg';
+import pronima from '../components/pronima.jpg';
+import nayajeevan from '../components/nayajeevan.jpg';
+import borahmedical from '../components/borahmedical.jpg';
+import joyguru from '../components/joyguru.jpg';
+import maagunalata from '../components/maagunalata.jpg';
 
 interface Shop {
   id: string;
@@ -7,7 +13,6 @@ interface Shop {
   address: string;
   distance: string;
   rating: number;
-  reviews: number;
   openUntil: string;
   image: string;
   phone: string;
@@ -20,9 +25,8 @@ const allShops: Shop[] = [
     id: '1',
     name: 'M/S MAA MEDICOS',
     address: 'GG4G 7M3,Dhemaji,Jamguri Panchali,Assam 787057',
-    distance: '0.8 km',
+    distance: '8 km',
     rating: 4.8,
-    reviews: 245,
     openUntil: 'Open until 10 PM',
     image: '🏥',
     phone: '+91 98765 43210',
@@ -33,9 +37,8 @@ const allShops: Shop[] = [
     id: '2',
     name: 'Pronima Medical Hall',
     address: 'Karichuk Bazar, FHH2 885, kulpathar, Dhemaji, Assam 787057',
-    distance: '1.2 km',
+    distance: '9.2 km',
     rating: 4.6,
-    reviews: 189,
     openUntil: 'Open until 9 PM',
     image: '⚕️',
     phone: '+91 98765 43211',
@@ -46,9 +49,8 @@ const allShops: Shop[] = [
     id: '3',
     name: 'Naya Jeevan Medical',
     address: 'Panch Ali Road, Panch Ali, Dhemaji, Jamguri Panchali, Assam 787057',
-    distance: '1.8 km',
+    distance: '8.8 km',
     rating: 4.9,
-    reviews: 312,
     openUntil: 'Open 24 hours',
     image: '💚',
     phone: '+91 98765 43212',
@@ -59,9 +61,8 @@ const allShops: Shop[] = [
     id: '4',
     name: 'Borah Medical',
     address: 'No. 1 Bishnupur, Assam 787057',
-    distance: '2.3 km',
+    distance: '9.3 km',
     rating: 4.5,
-    reviews: 156,
     openUntil: 'Open until 8 PM',
     image: '🏪',
     phone: '+91 98765 43213',
@@ -72,9 +73,8 @@ const allShops: Shop[] = [
     id: '5',
     name: 'Joyguru Medical Store',
     address: '09 Karisuk, Dhemaji Station Rd, Dhemaji, Assam 787057',
-    distance: '3.0 km',
+    distance: '9.0 km',
     rating: 4.7,
-    reviews: 198,
     openUntil: 'Open until 9 PM',
     image: '👨‍⚕️',
     phone: '+91 98765 43214',
@@ -85,9 +85,8 @@ const allShops: Shop[] = [
     id: '6',
     name: 'Maa Gunalata Medical',
     address: 'Station Road,Near BSNL Telephone exchange, Dhemaji, Assam 787057',
-    distance: '3.5 km',
+    distance: '8.5 km',
     rating: 4.4,
-    reviews: 134,
     openUntil: 'Open until 11 PM',
     image: '⚡',
     phone: '+91 98765 43215',
@@ -182,8 +181,48 @@ export function ShopsPage() {
               key={shop.id}
               className="bg-white rounded-2xl border border-border overflow-hidden hover:shadow-lg transition-all duration-300"
             >
-              <div className="h-40 bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center text-7xl relative">
-                {shop.image}
+              <div className="relative h-40">
+                {shop.id === '1' ? (
+                  <img 
+                    src={maamedicos} 
+                    alt={shop.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : shop.id === '2' ? (
+                  <img 
+                    src={pronima} 
+                    alt={shop.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : shop.id === '3' ? (
+                  <img 
+                    src={nayajeevan} 
+                    alt={shop.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : shop.id === '4' ? (
+                  <img 
+                    src={borahmedical} 
+                    alt={shop.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : shop.id === '5' ? (
+                  <img 
+                    src={joyguru} 
+                    alt={shop.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : shop.id === '6' ? (
+                  <img 
+                    src={maagunalata} 
+                    alt={shop.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="h-40 bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center text-7xl">
+                    {shop.image}
+                  </div>
+                )}
                 {shop.available24h && (
                   <span className="absolute top-4 right-4 px-3 py-1 bg-amber-400 text-amber-900 text-xs rounded-full font-medium">
                     24/7
@@ -203,7 +242,6 @@ export function ShopsPage() {
                   <div className="flex items-center gap-1 bg-amber-50 px-3 py-1.5 rounded-lg">
                     <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
                     <span className="font-medium">{shop.rating}</span>
-                    <span className="text-sm text-muted-foreground">({shop.reviews})</span>
                   </div>
                 </div>
 
@@ -224,29 +262,16 @@ export function ShopsPage() {
                   </div>
                 </div>
 
-                <div className="mb-4">
-                  <h4 className="text-sm font-medium mb-2">Services:</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {shop.services.map((service, index) => (
-                      <span
-                        key={index}
-                        className="px-3 py-1 bg-green-50 text-green-700 text-xs rounded-full"
-                      >
-                        {service}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
                 <div className="flex gap-3">
-                  <button className="flex-1 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors flex items-center justify-center gap-2">
+                  <a 
+                    href={shop.id === '1' ? 'https://www.google.com/maps/place/M%2FS+MAA+MEDICO\'S/@27.5087038,94.507669,15z/data=!3m1!4b1!4m6!3m5!1s0x3740e79e73bc3d2b:0x7d7759c74198490b!8m2!3d27.508686!4d94.5261231!16s%2Fg%2F11scfncnhp?entry=ttu&g_ep=EgoyMDI2MDUwMi4wIKXMDSoASAFQAw%3D%3D' : shop.id === '2' ? 'https://www.google.com/maps/place/Pronima+Medical+Hall/@27.4782825,94.5492875,18.27z/data=!4m6!3m5!1s0x3740e7aa402486cd:0x47b59c28f7f4711f!8m2!3d27.4782527!4d94.5505011!16s%2Fg%2F11xcfmvbrr?entry=ttu&g_ep=EgoyMDI2MDUwMi4wIKXMDSoASAFQAw%3D%3D' : shop.id === '3' ? 'https://www.google.com/maps/place/Naya+Jeevan+Medical+Hall/@27.5095471,94.5073471,15z/data=!3m1!4b1!4m6!3m5!1s0x3740e7ee49202619:0x3cab4877639d08e3!8m2!3d27.5095293!4d94.5258012!16s%2Fg%2F11tk9xlctz?entry=ttu&g_ep=EgoyMDI2MDUwMi4wIKXMDSoASAFQAw%3D%3D' : shop.id === '4' ? 'https://www.google.com/maps/place/Borah+Medical/@27.5234353,94.5186959,17z/data=!3m1!4b1!4m6!3m5!1s0x3740e655556d588f:0x61363fd96d9f8d40!8m2!3d27.5234306!4d94.5212708!16s%2Fg%2F11yb2b_h6m?entry=ttu&g_ep=EgoyMDI2MDUwMi4wIKXMDSoASAFQAw%3D%3D' : shop.id === '5' ? 'https://www.google.com/maps/place/Joy+guru+Medical+Store/@27.4776991,94.5486822,17z/data=!3m1!4b1!4m6!3m5!1s0x3740e70ad3148c3f:0x8a373d86eea5e65a!8m2!3d27.4776944!4d94.5512571!16s%2Fg%2F11kp_92blx?entry=ttu&g_ep=EgoyMDI2MDUwMi4wIKXMDSoASAFQAw%3D%3D' : shop.id === '6' ? 'https://www.google.com/maps/place/Maa+Gunalata+Medical/@27.4766033,94.5540887,17z/data=!3m1!4b1!4m6!3m5!1s0x3740e78fa269e789:0x25b90c8af8fb0ef4!8m2!3d27.4765986!4d94.5566636!16s%2Fg%2F11h2h4rgf2?entry=ttu&g_ep=EgoyMDI2MDUwMi4wIKXMDSoASAFQAw%3D%3D' : `https://maps.google.com/maps?q=${encodeURIComponent(shop.address)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors flex items-center justify-center gap-2"
+                  >
                     <Navigation className="w-4 h-4" />
                     Get Directions
-                  </button>
-                  <button className="px-4 py-2 border border-border hover:bg-accent rounded-lg transition-colors flex items-center justify-center gap-2">
-                    <Phone className="w-4 h-4" />
-                    Call
-                  </button>
+                  </a>
                 </div>
               </div>
             </div>
