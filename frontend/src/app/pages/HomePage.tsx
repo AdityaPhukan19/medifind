@@ -4,121 +4,26 @@ import { useOutletContext } from 'react-router';
 import { MedicineCard } from '../components/MedicineCard';
 import type { Medicine } from '../components/MedicineCard';
 import { AvailabilityModal } from '../components/AvailabilityModal';
-import type { CartItem } from '../components/Cart';
 import type { OutletContext } from '../routes';
-import amoxicillinImg from '../components/Amoxicillin250mg.webp';
-import paracetamolImg from '../components/paracetamol500mg.webp';
-import ibuprofenImg from '../components/ibuprofen400mg.webp';
-import cetirizineImg from '../components/cetirizine10mg.webp';
-import metforminImg from '../components/metformin500mg.webp';
-import vitaminD3Img from '../components/vitaminD3100iu.jpg';
-
-const mockMedicines: Medicine[] = [
-  {
-    id: '1',
-    name: 'Paracetamol 500mg',
-    genericName: 'Acetaminophen',
-    price: 5.99,
-    image: paracetamolImg,
-    category: 'Pain Relief',
-    prescription: false,
-    availability: [
-      { shopName: 'HealthPlus Pharmacy', distance: '0.5 mi', stock: 45, price: 5.99 },
-      { shopName: 'MediCare Center', distance: '0.8 mi', stock: 23, price: 6.49 },
-      { shopName: 'Quick Meds', distance: '1.2 mi', stock: 67, price: 5.79 },
-    ],
-  },
-  {
-    id: '2',
-    name: 'Amoxicillin 250mg',
-    genericName: 'Amoxicillin',
-    price: 12.99,
-    image: amoxicillinImg,
-    category: 'Antibiotic',
-    prescription: true,
-    availability: [
-      { shopName: 'HealthPlus Pharmacy', distance: '0.5 mi', stock: 12, price: 12.99 },
-      { shopName: 'City Pharmacy', distance: '1.5 mi', stock: 8, price: 13.49 },
-    ],
-  },
-  {
-    id: '3',
-    name: 'Ibuprofen 400mg',
-    genericName: 'Ibuprofen',
-    price: 7.49,
-    image: ibuprofenImg,
-    category: 'Anti-inflammatory',
-    prescription: false,
-    availability: [
-      { shopName: 'MediCare Center', distance: '0.8 mi', stock: 34, price: 7.49 },
-      { shopName: 'Quick Meds', distance: '1.2 mi', stock: 56, price: 7.29 },
-      { shopName: 'Family Pharmacy', distance: '2.0 mi', stock: 41, price: 7.99 },
-    ],
-  },
-  {
-    id: '4',
-    name: 'Cetirizine 10mg',
-    genericName: 'Cetirizine HCl',
-    price: 8.99,
-    image: cetirizineImg,
-    category: 'Antihistamine',
-    prescription: false,
-    availability: [
-      { shopName: 'HealthPlus Pharmacy', distance: '0.5 mi', stock: 28, price: 8.99 },
-      { shopName: 'Quick Meds', distance: '1.2 mi', stock: 19, price: 8.49 },
-    ],
-  },
-  {
-    id: '5',
-    name: 'Metformin 500mg',
-    genericName: 'Metformin HCl',
-    price: 15.99,
-    image: metforminImg,
-    category: 'Diabetes',
-    prescription: true,
-    availability: [
-      { shopName: 'MediCare Center', distance: '0.8 mi', stock: 15, price: 15.99 },
-      { shopName: 'City Pharmacy', distance: '1.5 mi', stock: 22, price: 16.49 },
-      { shopName: 'HealthPlus Pharmacy', distance: '0.5 mi', stock: 11, price: 15.79 },
-    ],
-  },
-  {
-    id: '6',
-    name: 'Vitamin D3 1000 IU',
-    genericName: 'Cholecalciferol',
-    price: 9.99,
-    image: vitaminD3Img,
-    category: 'Supplement',
-    prescription: false,
-    availability: [
-      { shopName: 'Quick Meds', distance: '1.2 mi', stock: 78, price: 9.99 },
-      { shopName: 'Family Pharmacy', distance: '2.0 mi', stock: 92, price: 9.49 },
-    ],
-  },
-];
-
-interface HomePageProps {}
 
 export function HomePage() {
-  const { onAddToCart, nearbyShops } = useOutletContext<OutletContext>();
+  const { onAddToCart, nearbyShops, medicines } = useOutletContext<OutletContext>();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedMedicine, setSelectedMedicine] = useState<Medicine | null>(null);
-  const [filteredMedicines, setFilteredMedicines] = useState(mockMedicines);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
-    if (query.trim() === '') {
-      setFilteredMedicines(mockMedicines);
-    } else {
-      const filtered = mockMedicines.filter(
-        (med) =>
-          med.name.toLowerCase().includes(query.toLowerCase()) ||
-          med.genericName.toLowerCase().includes(query.toLowerCase()) ||
-          med.category.toLowerCase().includes(query.toLowerCase())
-      );
-      setFilteredMedicines(filtered);
-    }
   };
+
+  const filteredMedicines = medicines
+    .filter(
+      (med) =>
+        searchQuery.trim() === '' ||
+        med.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        med.genericName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        med.category.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .slice(0, 6);
 
   return (
     <>

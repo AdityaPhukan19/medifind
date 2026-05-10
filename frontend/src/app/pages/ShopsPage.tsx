@@ -95,6 +95,11 @@ const allShops: Shop[] = [
   },
 ];
 
+const getDirectionsUrl = (shop: Shop) => {
+  const destination = `${shop.name}, ${shop.address}`;
+  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}&travelmode=driving`;
+};
+
 export function ShopsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<'distance' | 'rating'>('distance');
@@ -264,7 +269,7 @@ export function ShopsPage() {
 
                 <div className="flex gap-3">
                   <a 
-                    href={shop.id === '1' ? 'https://www.google.com/maps/place/M%2FS+MAA+MEDICO\'S/@27.5087038,94.507669,15z/data=!3m1!4b1!4m6!3m5!1s0x3740e79e73bc3d2b:0x7d7759c74198490b!8m2!3d27.508686!4d94.5261231!16s%2Fg%2F11scfncnhp?entry=ttu&g_ep=EgoyMDI2MDUwMi4wIKXMDSoASAFQAw%3D%3D' : shop.id === '2' ? 'https://www.google.com/maps/place/Pronima+Medical+Hall/@27.4782825,94.5492875,18.27z/data=!4m6!3m5!1s0x3740e7aa402486cd:0x47b59c28f7f4711f!8m2!3d27.4782527!4d94.5505011!16s%2Fg%2F11xcfmvbrr?entry=ttu&g_ep=EgoyMDI2MDUwMi4wIKXMDSoASAFQAw%3D%3D' : shop.id === '3' ? 'https://www.google.com/maps/place/Naya+Jeevan+Medical+Hall/@27.5095471,94.5073471,15z/data=!3m1!4b1!4m6!3m5!1s0x3740e7ee49202619:0x3cab4877639d08e3!8m2!3d27.5095293!4d94.5258012!16s%2Fg%2F11tk9xlctz?entry=ttu&g_ep=EgoyMDI2MDUwMi4wIKXMDSoASAFQAw%3D%3D' : shop.id === '4' ? 'https://www.google.com/maps/place/Borah+Medical/@27.5234353,94.5186959,17z/data=!3m1!4b1!4m6!3m5!1s0x3740e655556d588f:0x61363fd96d9f8d40!8m2!3d27.5234306!4d94.5212708!16s%2Fg%2F11yb2b_h6m?entry=ttu&g_ep=EgoyMDI2MDUwMi4wIKXMDSoASAFQAw%3D%3D' : shop.id === '5' ? 'https://www.google.com/maps/place/Joy+guru+Medical+Store/@27.4776991,94.5486822,17z/data=!3m1!4b1!4m6!3m5!1s0x3740e70ad3148c3f:0x8a373d86eea5e65a!8m2!3d27.4776944!4d94.5512571!16s%2Fg%2F11kp_92blx?entry=ttu&g_ep=EgoyMDI2MDUwMi4wIKXMDSoASAFQAw%3D%3D' : shop.id === '6' ? 'https://www.google.com/maps/place/Maa+Gunalata+Medical/@27.4766033,94.5540887,17z/data=!3m1!4b1!4m6!3m5!1s0x3740e78fa269e789:0x25b90c8af8fb0ef4!8m2!3d27.4765986!4d94.5566636!16s%2Fg%2F11h2h4rgf2?entry=ttu&g_ep=EgoyMDI2MDUwMi4wIKXMDSoASAFQAw%3D%3D' : `https://maps.google.com/maps?q=${encodeURIComponent(shop.address)}`}
+                    href={getDirectionsUrl(shop)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex-1 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors flex items-center justify-center gap-2"

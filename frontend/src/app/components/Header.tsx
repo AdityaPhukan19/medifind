@@ -1,4 +1,4 @@
-import { ShoppingCart, MapPin, Menu, Search } from 'lucide-react';
+import { ShoppingCart, MapPin, Menu, Store } from 'lucide-react';
 import { Link, useLocation } from 'react-router';
 
 interface HeaderProps {
@@ -12,6 +12,9 @@ export function Header({ cartCount, onCartClick }: HeaderProps) {
   const isActive = (path: string) => {
     if (path === '/') {
       return location.pathname === '/';
+    }
+    if (path === '/home') {
+      return location.pathname === '/home';
     }
     return location.pathname.startsWith(path);
   };
@@ -34,7 +37,7 @@ export function Header({ cartCount, onCartClick }: HeaderProps) {
               <Link
                 to="/home"
                 className={`text-sm transition-colors ${
-                  isActive('/home')
+                  location.pathname === '/home'
                     ? 'text-green-600 font-medium'
                     : 'text-foreground hover:text-green-600'
                 }`}
@@ -44,7 +47,7 @@ export function Header({ cartCount, onCartClick }: HeaderProps) {
               <Link
                 to="/home/medicines"
                 className={`text-sm transition-colors ${
-                  isActive('/medicines')
+                  isActive('/home/medicines')
                     ? 'text-green-600 font-medium'
                     : 'text-foreground hover:text-green-600'
                 }`}
@@ -54,7 +57,7 @@ export function Header({ cartCount, onCartClick }: HeaderProps) {
               <Link
                 to="/home/shops"
                 className={`text-sm transition-colors ${
-                  isActive('/shops')
+                  isActive('/home/shops')
                     ? 'text-green-600 font-medium'
                     : 'text-foreground hover:text-green-600'
                 }`}
@@ -64,12 +67,23 @@ export function Header({ cartCount, onCartClick }: HeaderProps) {
               <Link
                 to="/home/categories"
                 className={`text-sm transition-colors ${
-                  isActive('/categories')
+                  isActive('/home/categories')
                     ? 'text-green-600 font-medium'
                     : 'text-foreground hover:text-green-600'
                 }`}
               >
                 Categories
+              </Link>
+              <Link
+                to="/home/seller"
+                className={`text-sm transition-colors flex items-center gap-1.5 ${
+                  isActive('/home/seller')
+                    ? 'text-green-600 font-medium'
+                    : 'text-foreground hover:text-green-600'
+                }`}
+              >
+                <Store className="w-4 h-4" />
+                Seller
               </Link>
             </nav>
           </div>

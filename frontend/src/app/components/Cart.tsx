@@ -1,4 +1,5 @@
-import { X, Trash2, ShoppingBag } from 'lucide-react';
+import { useState } from 'react';
+import { X, Trash2, ShoppingBag, CheckCircle2 } from 'lucide-react';
 
 export interface CartItem {
   id: string;
@@ -15,12 +16,37 @@ interface CartProps {
   onClose: () => void;
   onUpdateQuantity: (id: string, quantity: number) => void;
   onRemove: (id: string) => void;
+  onCheckout: (details: {
+    customer: string;
+    phone: string;
+    address: string;
+    deliveryMode: 'Delivery' | 'Pickup';
+  }) => void;
 }
 
-export function Cart({ isOpen, items, onClose, onUpdateQuantity, onRemove }: CartProps) {
+export function Cart({ isOpen, items, onClose, onUpdateQuantity, onRemove, onCheckout }: CartProps) {
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [checkoutError, setCheckoutError] = useState('');
+  const [checkoutDetails, setCheckoutDetails] = useState({
+    customer: 'Demo Buyer',
+    phone: '+91 90000 11111',
+    address: 'Dhemaji, Assam',
+    deliveryMode: 'Delivery' as 'Delivery' | 'Pickup',
+  });
   const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   if (!isOpen) return null;
+
+  const handleSubmit = () => {
+    if (!checkoutDetails.customer || !checkoutDetails.phone || !checkoutDetails.address) {
+      setCheckoutError('Please fill in name, phone, and address.');
+      return;
+    }
+
+    setCheckoutError('');
+    onCheckout(checkoutDetails);
+    setIsCheckingOut(false);
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end">
@@ -30,7 +56,10 @@ export function Cart({ isOpen, items, onClose, onUpdateQuantity, onRemove }: Car
         <div className="p-6 border-b border-border flex items-center justify-between">
           <h2 className="text-xl font-semibold">Shopping Cart</h2>
           <button
-            onClick={onClose}
+            onClick={() => {
+              setIsCheckingOut(false);
+              onClose();
+            }}
             className="p-2 hover:bg-accent rounded-lg transition-colors"
           >
             <X className="w-5 h-5" />
@@ -45,6 +74,70 @@ export function Cart({ isOpen, items, onClose, onUpdateQuantity, onRemove }: Car
               <p className="text-sm text-muted-foreground">
                 Add medicines to get started
               </p>
+            </div>
+          ) : isCheckingOut ? (
+            <div className="space-y-4">
+              <div className="rounded-xl bg-green-50 border border-green-100 p-4">
+                <div className="flex items-center gap-2 font-medium text-green-900 mb-1">
+                  <CheckCircle2 className="w-5 h-5" />
+                  Checkout Details
+                </div>
+                <p className="text-sm text-green-800">This will create seller orders for medicines from verified sellers.</p>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium mb-2 block" htmlFor="checkout-name">Full name</label>
+                <input
+                  id="checkout-name"
+                  value={checkoutDetails.customer}
+                  onChange={(event) => setCheckoutDetails({ ...checkoutDetails, customer: event.target.value })}
+                  className="w-full px-4 py-3 bg-input-background rounded-xl outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+
+              <div>
+                <label className="text-sm font-medium mb-2 block" htmlFor="checkout-phone">Phone</label>
+                <input
+                  id="checkout-phone"
+                  value={checkoutDetails.phone}
+                  onChange={(event) => setCheckoutDetails({ ...checkoutDetails, phone: event.target.value })}
+                  className="w-full px-4 py-3 bg-input-background rounded-xl outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+
+              <div>
+                <label className="text-sm font-medium mb-2 block" htmlFor="checkout-address">Address</label>
+                <textarea
+                  id="checkout-address"
+                  value={checkoutDetails.address}
+                  onChange={(event) => setCheckoutDetails({ ...checkoutDetails, address: event.target.value })}
+                  rows={3}
+                  className="w-full px-4 py-3 bg-input-background rounded-xl outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                {(['Delivery', 'Pickup'] as const).map((mode) => (
+                  <button
+                    key={mode}
+                    type="button"
+                    onClick={() => setCheckoutDetails({ ...checkoutDetails, deliveryMode: mode })}
+                    className={`px-4 py-3 rounded-xl border transition-colors ${
+                      checkoutDetails.deliveryMode === mode
+                        ? 'bg-emerald-600 border-emerald-600 text-white'
+                        : 'bg-white border-border hover:bg-accent'
+                    }`}
+                  >
+                    {mode}
+                  </button>
+                ))}
+              </div>
+
+              {checkoutError && (
+                <div className="rounded-xl bg-amber-50 border border-amber-100 px-4 py-3 text-sm text-amber-800">
+                  {checkoutError}
+                </div>
+              )}
             </div>
           ) : (
             <div className="space-y-4">
@@ -116,9 +209,29 @@ export function Cart({ isOpen, items, onClose, onUpdateQuantity, onRemove }: Car
               <span className="text-lg font-semibold">Total</span>
               <span className="text-2xl font-semibold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">₹{(total * 80).toFixed(0)}</span>
             </div>
-            <button className="w-full py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white rounded-xl transition-colors shadow-lg shadow-green-500/30">
-              Proceed to Checkout
-            </button>
+            {isCheckingOut ? (
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={() => setIsCheckingOut(false)}
+                  className="py-3 bg-white border border-border hover:bg-accent rounded-xl transition-colors"
+                >
+                  Back
+                </button>
+                <button
+                  onClick={handleSubmit}
+                  className="py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white rounded-xl transition-colors shadow-lg shadow-green-500/30"
+                >
+                  Place Order
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setIsCheckingOut(true)}
+                className="w-full py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white rounded-xl transition-colors shadow-lg shadow-green-500/30"
+              >
+                Proceed to Checkout
+              </button>
+            )}
           </div>
         )}
       </div>
