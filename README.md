@@ -20,7 +20,7 @@ A modern web application that helps users find medicines across nearby pharmacie
 
 ---
 
-## 🎯 Project Overview
+## 🎯 Project Overview (id="project-overview")
 
 **MediFind** is a full-featured medicine finder platform built with modern web technologies. It enables users to:
 - Securely authenticate as a user or admin with role-based access
