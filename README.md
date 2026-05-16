@@ -1,5 +1,7 @@
 # MediFind - Medicine Availability Finder
 
+Report: Link: [https://canva.link/69t3c1j6vwhrmqe]([url](https://canva.link/69t3c1j6vwhrmqe))
+
 A modern web application that helps users find medicines across nearby pharmacies and shops. MediFind provides an intuitive interface to search for medicines, check availability, compare prices, and manage shopping carts.
 
 ## 📋 Table of Contents
